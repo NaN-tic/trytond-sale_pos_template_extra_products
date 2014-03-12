@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!-- The COPYRIGHT file at the top level of this repository contains the full
+     copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="ir.ui.view" id="set_quantities_start_view_form">
+            <field name="model">sale_pos.set_quantities.start</field>
+            <field name="inherit" ref="sale_pos_template_quantities.set_quantities_start_view_form"/>
+            <field name="name">set_quantities_start_form</field>
+        </record>
+    </data>
+</tryton>

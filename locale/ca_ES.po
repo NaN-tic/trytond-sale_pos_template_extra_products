@@ -1,0 +1,35 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:sale.line,template_extra_childs:"
+msgid "Childs"
+msgstr "Fills"
+
+msgctxt "field:sale.line,template_extra_parent:"
+msgid "Parent"
+msgstr "Pare"
+
+msgctxt "field:sale_pos.set_quantities.start,extra_products:"
+msgid "Extra Products"
+msgstr "Productes extra"
+
+msgctxt "field:sale_pos.set_quantities.start,template_line_template:"
+msgid "Template"
+msgstr "Plantilla"
+
+msgctxt "field:sale_pos.set_quantities.start-product.product,id:"
+msgid "ID"
+msgstr "Identificador"
+
+msgctxt "field:sale_pos.set_quantities.start-product.product,product:"
+msgid "Set Quantities Start"
+msgstr "Estableix quantitats"
+
+msgctxt "field:sale_pos.set_quantities.start-product.product,start:"
+msgid "Set Quantities Start"
+msgstr "Estableix quantitats"
+
+msgctxt "model:sale_pos.set_quantities.start-product.product,name:"
+msgid "Set Quantities Start - Product Product"
+msgstr "Assistent Estableix quantitats - Producte"
