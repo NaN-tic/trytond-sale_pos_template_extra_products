@@ -2,6 +2,42 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "field:party-extra_product,create_date:"
+msgid "Create Date"
+msgstr "Fecha de creación"
+
+msgctxt "field:party-extra_product,create_uid:"
+msgid "Create User"
+msgstr "Usuario de creación"
+
+msgctxt "field:party-extra_product,id:"
+msgid "ID"
+msgstr "Identificador"
+
+msgctxt "field:party-extra_product,party:"
+msgid "Party"
+msgstr "Tercero"
+
+msgctxt "field:party-extra_product,product:"
+msgid "Product"
+msgstr "Producto"
+
+msgctxt "field:party-extra_product,rec_name:"
+msgid "Name"
+msgstr "Nombre"
+
+msgctxt "field:party-extra_product,write_date:"
+msgid "Write Date"
+msgstr "Fecha modificación"
+
+msgctxt "field:party-extra_product,write_uid:"
+msgid "Write User"
+msgstr "Usuario modificación"
+
+msgctxt "field:party.party,default_extra_services:"
+msgid "Default Extra Services"
+msgstr "Servicios extra por defecto"
+
 msgctxt "field:sale.line,template_extra_childs:"
 msgid "Childs"
 msgstr "Hijos"
@@ -29,6 +65,18 @@ msgstr "Fijar cantidades"
 msgctxt "field:sale_pos.set_quantities.start-product.product,start:"
 msgid "Set Quantities Start"
 msgstr "Fijar cantidades"
+
+msgctxt "help:party.party,default_extra_services:"
+msgid ""
+"These services will be added automatically to the Template Quantities wizard"
+" on Sales."
+msgstr ""
+"Estos servicios se añadirán automáticamente al asistente de cantidades en "
+"las ventas."
+
+msgctxt "model:party-extra_product,name:"
+msgid "Party - Extra Services"
+msgstr "Tercero - Servicio extra"
 
 msgctxt "model:sale_pos.set_quantities.start-product.product,name:"
 msgid "Set Quantities Start - Product Product"

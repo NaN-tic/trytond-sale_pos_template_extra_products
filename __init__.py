@@ -6,6 +6,8 @@ from .sale import *
 
 def register():
     Pool.register(
+        Party,
+        PartyExtraProduct,
         SaleLine,
         SetQuantitiesStart,
         SetQuantitiesStartProductProduct,

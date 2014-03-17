@@ -1,12 +1,33 @@
 # The COPYRIGHT file at the top level of this repository contains the full
 # copyright notices and license terms.
-from trytond.model import Model, fields
+from trytond.model import Model, ModelSQL, fields
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Bool, Eval, If, Or
 
-__all__ = ['SaleLine', 'SetQuantities', 'SetQuantitiesStart',
-    'SetQuantitiesStartProductProduct']
+__all__ = ['Party', 'PartyExtraProduct', 'SaleLine',
+    'SetQuantities', 'SetQuantitiesStart', 'SetQuantitiesStartProductProduct']
 __metaclass__ = PoolMeta
+
+
+class Party:
+    __name__ = 'party.party'
+
+    default_extra_services = fields.Many2Many('party-extra_product', 'party',
+        'product', 'Default Extra Services', domain=[
+            ('type', '=', 'service'),
+            ],
+        help='These services will be added automatically to the Template '
+        'Quantities wizard on Sales.')
+
+
+class PartyExtraProduct(ModelSQL):
+    'Party - Extra Services'
+    __name__ = 'party-extra_product'
+
+    party = fields.Many2One('party.party', 'Party', ondelete='CASCADE',
+        required=True, select=True)
+    product = fields.Many2One('product.product', 'Product', ondelete='CASCADE',
+        required=True, select=True)
 
 
 class SaleLine:
@@ -124,8 +145,13 @@ class SetQuantities:
             return res
 
         template_line = SaleLine(res['template_line'])
-        res['extra_products'] = list(set(l.product.id
-            for l in template_line.template_extra_childs))
+        if (template_line.template_extra_childs or
+                template_line.template_childs):
+            res['extra_products'] = list(set(l.product.id
+                for l in template_line.template_extra_childs))
+        else:
+            res['extra_products'] = [p.id
+                for p in template_line.sale.party.default_extra_services]
         res['template_line_template'] = template_line.template.id
         return res
 
