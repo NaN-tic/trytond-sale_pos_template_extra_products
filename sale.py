@@ -13,7 +13,8 @@ class Party:
     __name__ = 'party.party'
 
     default_extra_services = fields.Many2Many('party-extra_product', 'party',
-        'product', 'Default Extra Services', domain=[
+        'product', 'Default Extra Services',
+        domain=[
             ('type', '=', 'service'),
             ],
         help='These services will be added automatically to the Template '
