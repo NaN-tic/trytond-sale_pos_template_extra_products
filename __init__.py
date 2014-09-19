@@ -6,11 +6,13 @@ from .sale import *
 
 def register():
     Pool.register(
+        Template,
         Party,
         PartyExtraProduct,
+        Sale,
+        SaleExtraProduct,
         SaleLine,
         SetQuantitiesStart,
-        SetQuantitiesStartProductProduct,
         module='sale_pos_template_extra_products', type_='model')
     Pool.register(
         SetQuantities,

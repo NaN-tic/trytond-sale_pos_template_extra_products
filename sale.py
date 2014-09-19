@@ -1,12 +1,31 @@
 # The COPYRIGHT file at the top level of this repository contains the full
 # copyright notices and license terms.
-from trytond.model import Model, ModelSQL, fields
+from trytond.model import ModelSQL, fields
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Bool, Eval, If, Or
 
-__all__ = ['Party', 'PartyExtraProduct', 'SaleLine',
-    'SetQuantities', 'SetQuantitiesStart', 'SetQuantitiesStartProductProduct']
+__all__ = ['Template', 'Party', 'PartyExtraProduct', 'Sale',
+    'SaleExtraProduct', 'SaleLine',  'SetQuantities', 'SetQuantitiesStart']
 __metaclass__ = PoolMeta
+
+
+class Template:
+    __name__ = 'product.template'
+
+    service_available_on = fields.Selection([
+            ('not_available', 'Not available'),
+            ('sales', 'Sales'),
+            ('lines', 'Sale Lines'),
+            ], 'Available On',
+        states={
+            'invisible': Eval('type') != 'service',
+            'required': Eval('type') == 'service',
+            },
+        depends=['type'])
+
+    @staticmethod
+    def default_service_available_on():
+        return 'not_available'
 
 
 class Party:
@@ -16,6 +35,7 @@ class Party:
         'product', 'Default Extra Services',
         domain=[
             ('type', '=', 'service'),
+            ('service_available_on', '=', 'sales'),
             ],
         help='These services will be added automatically to the Template '
         'Quantities wizard on Sales.')
@@ -26,6 +46,60 @@ class PartyExtraProduct(ModelSQL):
     __name__ = 'party-extra_product'
 
     party = fields.Many2One('party.party', 'Party', ondelete='CASCADE',
+        required=True, select=True)
+    product = fields.Many2One('product.product', 'Product', ondelete='CASCADE',
+        required=True, select=True)
+
+
+class Sale:
+    __name__ = 'sale.sale'
+
+    extra_services = fields.Many2Many('sale.sale-extra_product', 'sale',
+        'product', 'Extra Services',
+        domain=[
+            ('type', '=', 'service'),
+            ('service_available_on', '=', 'sales'),
+            ],
+        states={
+            'readonly': Eval('state') != 'draft',
+            },
+        depends=['state'])
+
+    @fields.depends('party', 'extra_services')
+    def on_change_party(self):
+        pool = Pool()
+        Product = pool.get('product.product')
+        changes = super(Sale, self).on_change_party()
+        changes['extra_services'] = {}
+        if self.extra_services:
+            changes['extra_services']['remove'] = [s.id
+                for s in self.extra_services]
+        if self.party and self.party.default_extra_services:
+            changes['extra_services']['add'] = []
+            for index, product in enumerate(self.party.default_extra_services):
+                vals = {'id': product.id}
+                for field_name, field in Product._fields.iteritems():
+                    try:
+                        value = getattr(product, field_name)
+                    except AttributeError:
+                        continue
+                    if (value and field._type in ('many2one',
+                                'one2one')):
+                        vals[field_name] = value.id
+                        if value.id >= 0:
+                            vals[field_name + '.rec_name'] = \
+                                value.rec_name
+                    else:
+                        vals[field_name] = value
+                changes['extra_services']['add'].append((index, vals))
+        return changes
+
+
+class SaleExtraProduct(ModelSQL):
+    'Sale - Extra Services'
+    __name__ = 'sale.sale-extra_product'
+
+    sale = fields.Many2One('sale.sale', 'Sale', ondelete='CASCADE',
         required=True, select=True)
     product = fields.Many2One('product.product', 'Product', ondelete='CASCADE',
         required=True, select=True)
@@ -47,6 +121,7 @@ class SaleLine:
             ('template', '=', None),
             ('product', '!=', None),
             ('product.type', '=', 'service'),
+            ('product.service_available_on', '=', 'lines'),
             ('template_parent', '=', None),
             ])
 
@@ -64,14 +139,12 @@ class SaleLine:
                 ()))
         cls.product.depends.append('template_extra_parent')
 
-        cls.quantity.states['readonly'] = Or(cls.quantity.states['readonly'],
-            Bool(Eval('template_extra_parent', 0)))
-        cls.quantity.depends.append('template_extra_parent')
-
     def update_template_line_quantity(self):
+        old_quantity = self.quantity
         super(SaleLine, self).update_template_line_quantity()
         for extra_child_line in self.template_extra_childs:
-            extra_child_line.quantity = self.quantity
+            if extra_child_line.quantity == old_quantity:
+                extra_child_line.quantity = self.quantity
             ocp_res = extra_child_line.on_change_product()
             for f, v in ocp_res.iteritems():
                 setattr(extra_child_line, f, v)
@@ -118,23 +191,15 @@ class SetQuantitiesStart:
 
     template_line_template = fields.Many2One('product.template', 'Template',
         readonly=True)
-    extra_products = fields.Many2Many(
-        'sale_pos.set_quantities.start-product.product', 'start', 'product',
-        'Extra Products', domain=[
+    extra_products = fields.Many2Many('product.product', None, None,
+        'Extra Products',
+        domain=[
             ('template', '!=', Eval('template_line_template')),
             ('salable', '=', True),
             ('type', '=', 'service'),
-            ], depends=['template_line_template'])
-
-
-class SetQuantitiesStartProductProduct(Model):
-    'Set Quantities Start - Product Product'
-    __name__ = 'sale_pos.set_quantities.start-product.product'
-
-    start = fields.Many2One('sale_pos.set_quantities.start',
-        'Set Quantities Start', ondelete='CASCADE', required=True, select=True)
-    product = fields.Many2One('product.product', 'Set Quantities Start',
-        ondelete='CASCADE', required=True, select=True)
+            ('service_available_on', '=', 'lines'),
+            ],
+        depends=['template_line_template'])
 
 
 class SetQuantities:
@@ -152,9 +217,6 @@ class SetQuantities:
                 template_line.template_childs):
             res['extra_products'] = list(set(l.product.id
                 for l in template_line.template_extra_childs))
-        else:
-            res['extra_products'] = [p.id
-                for p in template_line.sale.party.default_extra_services]
         res['template_line_template'] = template_line.template.id
         return res
 
@@ -162,6 +224,7 @@ class SetQuantities:
         pool = Pool()
         SaleLine = pool.get('sale.line')
 
+        old_quantity = self.start.template_line.quantity
         res = super(SetQuantities, self).transition_set_()
 
         template_line = self.start.template_line
@@ -194,7 +257,8 @@ class SetQuantities:
                 for f, v in ocp_res.iteritems():
                     setattr(line, f, v)
 
-            line.quantity = template_line.quantity
+            if line.quantity == old_quantity:
+                line.quantity = template_line.quantity
             ocp_res = line.on_change_quantity()
             for f, v in ocp_res.iteritems():
                 setattr(line, f, v)

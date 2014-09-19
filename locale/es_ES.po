@@ -38,6 +38,10 @@ msgctxt "field:party.party,default_extra_services:"
 msgid "Default Extra Services"
 msgstr "Servicios extra por defecto"
 
+msgctxt "field:product.template,service_available_on:"
+msgid "Available On"
+msgstr "Disponible en"
+
 msgctxt "field:sale.line,template_extra_childs:"
 msgid "Childs"
 msgstr "Hijos"
@@ -46,6 +50,42 @@ msgctxt "field:sale.line,template_extra_parent:"
 msgid "Parent"
 msgstr "Padre"
 
+msgctxt "field:sale.sale,extra_services:"
+msgid "Extra Services"
+msgstr "Servicios Extra"
+
+msgctxt "field:sale.sale-extra_product,create_date:"
+msgid "Create Date"
+msgstr "Fecha de creación"
+
+msgctxt "field:sale.sale-extra_product,create_uid:"
+msgid "Create User"
+msgstr "Usuario de creación"
+
+msgctxt "field:sale.sale-extra_product,id:"
+msgid "ID"
+msgstr "Identificador"
+
+msgctxt "field:sale.sale-extra_product,product:"
+msgid "Product"
+msgstr "Productos"
+
+msgctxt "field:sale.sale-extra_product,rec_name:"
+msgid "Name"
+msgstr "Nombre"
+
+msgctxt "field:sale.sale-extra_product,sale:"
+msgid "Sale"
+msgstr "Venta"
+
+msgctxt "field:sale.sale-extra_product,write_date:"
+msgid "Write Date"
+msgstr "Fecha modificación"
+
+msgctxt "field:sale.sale-extra_product,write_uid:"
+msgid "Write User"
+msgstr "Usuario modificación"
+
 msgctxt "field:sale_pos.set_quantities.start,extra_products:"
 msgid "Extra Products"
 msgstr "Productos extra"
@@ -53,18 +93,6 @@ msgstr "Productos extra"
 msgctxt "field:sale_pos.set_quantities.start,template_line_template:"
 msgid "Template"
 msgstr "Plantilla"
-
-msgctxt "field:sale_pos.set_quantities.start-product.product,id:"
-msgid "ID"
-msgstr "Identificador"
-
-msgctxt "field:sale_pos.set_quantities.start-product.product,product:"
-msgid "Set Quantities Start"
-msgstr "Fijar cantidades"
-
-msgctxt "field:sale_pos.set_quantities.start-product.product,start:"
-msgid "Set Quantities Start"
-msgstr "Fijar cantidades"
 
 msgctxt "help:party.party,default_extra_services:"
 msgid ""
@@ -78,6 +106,18 @@ msgctxt "model:party-extra_product,name:"
 msgid "Party - Extra Services"
 msgstr "Tercero - Servicio extra"
 
-msgctxt "model:sale_pos.set_quantities.start-product.product,name:"
-msgid "Set Quantities Start - Product Product"
-msgstr "Asistente fijar cantidades - Producto"
+msgctxt "model:sale.sale-extra_product,name:"
+msgid "Sale - Extra Services"
+msgstr "Venta - Servicios Extra"
+
+msgctxt "selection:product.template,service_available_on:"
+msgid "Not available"
+msgstr "No disponible"
+
+msgctxt "selection:product.template,service_available_on:"
+msgid "Sale Lines"
+msgstr "Líneas de venta"
+
+msgctxt "selection:product.template,service_available_on:"
+msgid "Sales"
+msgstr "Ventas"
