@@ -1,1 +1,12 @@
+* Don't update unit price of extra product lines if the user has changed it
+* Add missing view files
+* Allow to define services in Sale level and allow to change quantities in
+  services
+
+Version 3.2.0 - 2014-06-04
+* Adapted to 3.2 series
+
+Version 3.0.0 - 2014-04-03
+* Fix copy
+* Add Default Extra Products to party
 * Initial release

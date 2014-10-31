@@ -143,11 +143,20 @@ class SaleLine:
         old_quantity = self.quantity
         super(SaleLine, self).update_template_line_quantity()
         for extra_child_line in self.template_extra_childs:
+            old_unit_price = extra_child_line.unit_price
+            if (extra_child_line.on_change_quantity()['unit_price']
+                    == old_unit_price):
+                # The user didn't changed the unit price
+                old_unit_price = None
             if extra_child_line.quantity == old_quantity:
                 extra_child_line.quantity = self.quantity
+
             ocp_res = extra_child_line.on_change_product()
             for f, v in ocp_res.iteritems():
                 setattr(extra_child_line, f, v)
+
+            if old_unit_price is not None:
+                extra_child_line.unit_price = old_unit_price
             extra_child_line.save()
 
     def update_sequence(self, next_sequence):
@@ -237,11 +246,26 @@ class SetQuantities:
             for l in template_line.template_extra_childs)
         lines_to_delete = list(template_line.template_extra_childs[:])
 
+        def apply_on_change_quantity(line):
+            ocp_res = line.on_change_quantity()
+            for f, v in ocp_res.iteritems():
+                setattr(line, f, v)
+
         for extra_product in self.start.extra_products:
             line = child_line_by_product.get(extra_product)
 
             if line:
                 lines_to_delete.remove(line)
+
+                old_unit_price = line.unit_price
+                if line.on_change_quantity()['unit_price'] == old_unit_price:
+                    # The user didn't changed the unit price
+                    old_unit_price = None
+                if line.quantity == old_quantity:
+                    line.quantity = template_line.quantity
+                apply_on_change_quantity(line)
+                if old_unit_price is not None:
+                    line.unit_price = old_unit_price
             else:
                 line = SaleLine()
                 line.sale = template_line.sale
@@ -256,12 +280,7 @@ class SetQuantities:
                 ocp_res = line.on_change_product()
                 for f, v in ocp_res.iteritems():
                     setattr(line, f, v)
-
-            if line.quantity == old_quantity:
-                line.quantity = template_line.quantity
-            ocp_res = line.on_change_quantity()
-            for f, v in ocp_res.iteritems():
-                setattr(line, f, v)
+                apply_on_change_quantity(line)
             line.save()
 
         if lines_to_delete:
