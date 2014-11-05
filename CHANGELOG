@@ -1,3 +1,5 @@
+Version 3.4.0 - 2014-11-03
+
 Version 3.2.1 - 2014-10-31
 * Don't update unit price of extra product lines if the user has changed it
 * Add missing view files
