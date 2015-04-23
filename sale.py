@@ -61,7 +61,7 @@ class Sale:
             ('service_available_on', '=', 'sales'),
             ],
         states={
-            'readonly': Eval('state') != 'draft',
+            'readonly': Eval('state') == 'done',
             },
         depends=['state'])
 
