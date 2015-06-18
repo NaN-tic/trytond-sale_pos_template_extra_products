@@ -47,7 +47,7 @@ class PartyExtraProduct(ModelSQL):
 
     party = fields.Many2One('party.party', 'Party', ondelete='CASCADE',
         required=True, select=True)
-    product = fields.Many2One('product.product', 'Product', ondelete='CASCADE',
+    product = fields.Many2One('product.product', 'Product', ondelete='RESTRICT',
         required=True, select=True)
 
 
@@ -101,7 +101,7 @@ class SaleExtraProduct(ModelSQL):
 
     sale = fields.Many2One('sale.sale', 'Sale', ondelete='CASCADE',
         required=True, select=True)
-    product = fields.Many2One('product.product', 'Product', ondelete='CASCADE',
+    product = fields.Many2One('product.product', 'Product', ondelete='RESTRICT',
         required=True, select=True)
 
 
