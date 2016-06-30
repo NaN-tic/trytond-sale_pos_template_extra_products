@@ -2,8 +2,8 @@
 <!-- The COPYRIGHT file at the top level of this repository contains the full
      copyright notices and license terms. -->
 <data>
-    <xpath expr="/form/notebook/page[@id='general']/field[@name='category']"
-            position="after">
+    <xpath expr="/form/notebook/page[@id='general']/field[@name='categories']"
+            position="before">
         <label name="service_available_on"/>
         <field name="service_available_on"/>
     </xpath>
