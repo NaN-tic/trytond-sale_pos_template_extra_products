@@ -6,10 +6,10 @@ from trytond.pyson import Bool, Eval, If, Or
 
 __all__ = ['Template', 'Party', 'PartyExtraProduct', 'Sale',
     'SaleExtraProduct', 'SaleLine',  'SetQuantities', 'SetQuantitiesStart']
-__metaclass__ = PoolMeta
 
 
 class Template:
+    __metaclass__ = PoolMeta
     __name__ = 'product.template'
 
     service_available_on = fields.Selection([
@@ -29,6 +29,7 @@ class Template:
 
 
 class Party:
+    __metaclass__ = PoolMeta
     __name__ = 'party.party'
 
     default_extra_services = fields.Many2Many('party-extra_product', 'party',
@@ -52,8 +53,8 @@ class PartyExtraProduct(ModelSQL):
 
 
 class Sale:
+    __metaclass__ = PoolMeta
     __name__ = 'sale.sale'
-
     extra_services = fields.Many2Many('sale.sale-extra_product', 'sale',
         'product', 'Extra Services',
         domain=[
@@ -67,38 +68,17 @@ class Sale:
 
     @fields.depends('party', 'extra_services')
     def on_change_party(self):
-        pool = Pool()
-        Product = pool.get('product.product')
-        changes = super(Sale, self).on_change_party()
-        changes['extra_services'] = {}
+        super(Sale, self).on_change_party()
+
         if self.extra_services:
-            changes['extra_services']['remove'] = [s.id
-                for s in self.extra_services]
+            self.extra_services = None
         if self.party and self.party.default_extra_services:
-            changes['extra_services']['add'] = []
-            for index, product in enumerate(self.party.default_extra_services):
-                vals = {'id': product.id}
-                for field_name, field in Product._fields.iteritems():
-                    try:
-                        value = getattr(product, field_name)
-                    except AttributeError:
-                        continue
-                    if (value and field._type in ('many2one',
-                                'one2one')):
-                        vals[field_name] = value.id
-                        if value.id >= 0:
-                            vals[field_name + '.rec_name'] = \
-                                value.rec_name
-                    else:
-                        vals[field_name] = value
-                changes['extra_services']['add'].append((index, vals))
-        return changes
+            self.extra_services = self.party.default_extra_services
 
 
 class SaleExtraProduct(ModelSQL):
     'Sale - Extra Services'
     __name__ = 'sale.sale-extra_product'
-
     sale = fields.Many2One('sale.sale', 'Sale', ondelete='CASCADE',
         required=True, select=True)
     product = fields.Many2One('product.product', 'Product', ondelete='RESTRICT',
@@ -106,8 +86,8 @@ class SaleExtraProduct(ModelSQL):
 
 
 class SaleLine:
+    __metaclass__ = PoolMeta
     __name__ = 'sale.line'
-
     template_extra_parent = fields.Many2One('sale.line', 'Parent', domain=[
             ('type', '=', 'line'),
             ('template', '!=', None),
@@ -144,16 +124,13 @@ class SaleLine:
         super(SaleLine, self).update_template_line_quantity()
         for extra_child_line in self.template_extra_childs:
             old_unit_price = extra_child_line.unit_price
-            if (extra_child_line.on_change_quantity()['unit_price']
+            if (extra_child_line.on_change_quantity().unit_price
                     == old_unit_price):
                 # The user didn't changed the unit price
                 old_unit_price = None
             if extra_child_line.quantity == old_quantity:
                 extra_child_line.quantity = self.quantity
-
-            ocp_res = extra_child_line.on_change_product()
-            for f, v in ocp_res.iteritems():
-                setattr(extra_child_line, f, v)
+            extra_child_line.on_change_product()
 
             if old_unit_price is not None:
                 extra_child_line.unit_price = old_unit_price
@@ -196,6 +173,7 @@ class SaleLine:
 
 
 class SetQuantitiesStart:
+    __metaclass__ = PoolMeta
     __name__ = 'sale_pos.set_quantities.start'
 
     template_line_template = fields.Many2One('product.template', 'Template',
@@ -212,6 +190,7 @@ class SetQuantitiesStart:
 
 
 class SetQuantities:
+    __metaclass__ = PoolMeta
     __name__ = 'sale_pos.set_quantities'
 
     def default_start(self, fields):
@@ -246,11 +225,6 @@ class SetQuantities:
             for l in template_line.template_extra_childs)
         lines_to_delete = list(template_line.template_extra_childs[:])
 
-        def apply_on_change_quantity(line):
-            ocp_res = line.on_change_quantity()
-            for f, v in ocp_res.iteritems():
-                setattr(line, f, v)
-
         for extra_product in self.start.extra_products:
             line = child_line_by_product.get(extra_product)
 
@@ -258,7 +232,7 @@ class SetQuantities:
                 lines_to_delete.remove(line)
 
                 old_unit_price = line.unit_price
-                if line.on_change_quantity()['unit_price'] == old_unit_price:
+                if line.on_change_quantity().unit_price == old_unit_price:
                     # The user didn't changed the unit price
                     old_unit_price = None
                 if line.quantity == old_quantity:
@@ -277,10 +251,8 @@ class SetQuantities:
                 line.unit = None
                 line.description = None
                 line.quantity = template_line.quantity
-                ocp_res = line.on_change_product()
-                for f, v in ocp_res.iteritems():
-                    setattr(line, f, v)
-                apply_on_change_quantity(line)
+                line.on_change_product()
+                line.on_change_quantity()
             line.save()
 
         if lines_to_delete:
