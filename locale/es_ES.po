@@ -4,15 +4,15 @@ msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "field:party-extra_product,create_date:"
 msgid "Create Date"
-msgstr "Fecha de creación"
+msgstr "Fecha creación"
 
 msgctxt "field:party-extra_product,create_uid:"
 msgid "Create User"
-msgstr "Usuario de creación"
+msgstr "Usuario creación"
 
 msgctxt "field:party-extra_product,id:"
 msgid "ID"
-msgstr "Identificador"
+msgstr "ID"
 
 msgctxt "field:party-extra_product,party:"
 msgid "Party"
@@ -56,11 +56,11 @@ msgstr "Servicios Extra"
 
 msgctxt "field:sale.sale-extra_product,create_date:"
 msgid "Create Date"
-msgstr "Fecha de creación"
+msgstr "Fecha creación"
 
 msgctxt "field:sale.sale-extra_product,create_uid:"
 msgid "Create User"
-msgstr "Usuario de creación"
+msgstr "Usuario creación"
 
 msgctxt "field:sale.sale-extra_product,id:"
 msgid "ID"
@@ -68,7 +68,7 @@ msgstr "Identificador"
 
 msgctxt "field:sale.sale-extra_product,product:"
 msgid "Product"
-msgstr "Productos"
+msgstr "Producto"
 
 msgctxt "field:sale.sale-extra_product,rec_name:"
 msgid "Name"
