@@ -237,7 +237,7 @@ class SetQuantities:
                     old_unit_price = None
                 if line.quantity == old_quantity:
                     line.quantity = template_line.quantity
-                apply_on_change_quantity(line)
+                line.on_change_quantity()
                 if old_unit_price is not None:
                     line.unit_price = old_unit_price
             else:
