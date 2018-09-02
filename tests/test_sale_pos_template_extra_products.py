@@ -10,7 +10,6 @@ class TestCase(ModuleTestCase):
     'Test module'
     module = 'sale_pos_template_extra_products'
 
-
 def suite():
     suite = trytond.tests.test_tryton.suite()
     suite.addTests(unittest.TestLoader().loadTestsFromTestCase(TestCase))
