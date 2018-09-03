@@ -8,8 +8,7 @@ __all__ = ['Template', 'Party', 'PartyExtraProduct', 'Sale',
     'SaleExtraProduct', 'SaleLine',  'SetQuantities', 'SetQuantitiesStart']
 
 
-class Template:
-    __metaclass__ = PoolMeta
+class Template(metaclass=PoolMeta):
     __name__ = 'product.template'
 
     service_available_on = fields.Selection([
@@ -28,8 +27,7 @@ class Template:
         return 'not_available'
 
 
-class Party:
-    __metaclass__ = PoolMeta
+class Party(metaclass=PoolMeta):
     __name__ = 'party.party'
 
     default_extra_services = fields.Many2Many('party-extra_product', 'party',
@@ -52,8 +50,7 @@ class PartyExtraProduct(ModelSQL):
         required=True, select=True)
 
 
-class Sale:
-    __metaclass__ = PoolMeta
+class Sale(metaclass=PoolMeta):
     __name__ = 'sale.sale'
     extra_services = fields.Many2Many('sale.sale-extra_product', 'sale',
         'product', 'Extra Services',
@@ -85,8 +82,7 @@ class SaleExtraProduct(ModelSQL):
         required=True, select=True)
 
 
-class SaleLine:
-    __metaclass__ = PoolMeta
+class SaleLine(metaclass=PoolMeta):
     __name__ = 'sale.line'
     template_extra_parent = fields.Many2One('sale.line', 'Parent', domain=[
             ('type', '=', 'line'),
@@ -172,8 +168,7 @@ class SaleLine:
         return new_lines
 
 
-class SetQuantitiesStart:
-    __metaclass__ = PoolMeta
+class SetQuantitiesStart(metaclass=PoolMeta):
     __name__ = 'sale_pos.set_quantities.start'
 
     template_line_template = fields.Many2One('product.template', 'Template',
@@ -189,8 +184,7 @@ class SetQuantitiesStart:
         depends=['template_line_template'])
 
 
-class SetQuantities:
-    __metaclass__ = PoolMeta
+class SetQuantities(metaclass=PoolMeta):
     __name__ = 'sale_pos.set_quantities'
 
     def default_start(self, fields):
