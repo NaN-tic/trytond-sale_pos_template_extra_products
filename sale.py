@@ -66,10 +66,14 @@ class Sale:
             },
         depends=['state'])
 
-    @fields.depends('party', 'extra_services')
+    @classmethod
+    def __setup__(cls):
+        super(Sale, cls).__setup__()
+        if 'extra_services' not in cls.party.on_change:
+            cls.party.on_change.add('extra_services')
+
     def on_change_party(self):
         super(Sale, self).on_change_party()
-
         if self.extra_services:
             self.extra_services = None
         if self.party and self.party.default_extra_services:
