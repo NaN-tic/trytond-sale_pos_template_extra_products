@@ -74,7 +74,7 @@ class Sale:
 
     def on_change_party(self):
         super(Sale, self).on_change_party()
-        if self.extra_services:
+        if hasattr(self, 'extra_services') and self.extra_services:
             self.extra_services = None
         if self.party and self.party.default_extra_services:
             self.extra_services = self.party.default_extra_services
