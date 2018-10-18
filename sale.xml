@@ -15,6 +15,12 @@
             <field name="name">party_form</field>
         </record>
 
+        <record model="ir.ui.view" id="sale_view_form">
+            <field name="model">sale.sale</field>
+            <field name="inherit" ref="sale.sale_view_form"/>
+            <field name="name">sale_form</field>
+        </record>
+
         <record model="ir.ui.view" id="sale_pos_view_form">
             <field name="model">sale.sale</field>
             <field name="inherit" ref="sale_pos.sale_pos_view_form"/>
