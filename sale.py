@@ -213,13 +213,13 @@ class SetQuantities:
         res['template_line_template'] = template_line.template.id
         return res
 
-    def transition_set_(self):
+    def transition_set_(self, *args, **kwargs):
         pool = Pool()
         SaleLine = pool.get('sale.line')
 
         old_quantity = self.start.template_line.quantity
-        res = super(SetQuantities, self).transition_set_()
 
+        res = super(SetQuantities, self).transition_set_(*args, **kwargs)
         template_line = self.start.template_line
         if not self.start.extra_products:
             if template_line.template_extra_childs:
