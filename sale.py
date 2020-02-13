@@ -161,8 +161,12 @@ class SaleLine(metaclass=PoolMeta):
         default['template_extra_childs'] = None
         new_lines = super(SaleLine, cls).copy(lines, default=default)
 
-        lines = sorted(lines, key=lambda a: (a.template, a.product))
-        new_lines = sorted(new_lines, key=lambda a: (a.template, a.product))
+        def sortfunc(a):
+            return (a.template.id if a.template else 0,
+                a.product.id if a.product else 0)
+
+        lines = sorted(lines, key=sortfunc)
+        new_lines = sorted(new_lines, key=sortfunc)
         new_line_by_line = dict((l, nl) for l, nl in zip(lines, new_lines))
         for new_line in new_lines:
             parent_line = new_line.template_extra_parent
