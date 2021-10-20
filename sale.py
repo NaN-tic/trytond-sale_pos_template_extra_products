@@ -4,7 +4,7 @@ from trytond.model import ModelSQL, fields
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Bool, Eval, If, Or
 
-__all__ = ['Template', 'Party', 'PartyExtraProduct', 'Sale',
+__all__ = ['Template', 'Product', 'Party', 'PartyExtraProduct', 'Sale',
     'SaleExtraProduct', 'SaleLine',  'SetQuantities', 'SetQuantitiesStart']
 
 
@@ -25,6 +25,10 @@ class Template(metaclass=PoolMeta):
     @staticmethod
     def default_service_available_on():
         return 'not_available'
+
+
+class Product(metaclass=PoolMeta):
+    __name__ = 'product.product'
 
 
 class Party(metaclass=PoolMeta):

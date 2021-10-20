@@ -7,6 +7,7 @@ from . import sale
 def register():
     Pool.register(
         sale.Template,
+        sale.Product,
         sale.Party,
         sale.PartyExtraProduct,
         sale.Sale,
