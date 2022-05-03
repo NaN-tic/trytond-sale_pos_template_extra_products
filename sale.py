@@ -122,7 +122,7 @@ class SaleLine(metaclass=PoolMeta):
             If(Bool(Eval('template_extra_parent', 0)),
                 ('type', '=', 'service'),
                 ()))
-        cls.product.depends.append('template_extra_parent')
+        cls.product.depends.add('template_extra_parent')
 
     def update_template_line_quantity(self):
         old_quantity = self.quantity
