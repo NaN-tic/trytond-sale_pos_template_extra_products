@@ -116,7 +116,7 @@ class SaleLine(metaclass=PoolMeta):
         cls.type.states['readonly'] = Or(cls.type.states['readonly'],
             Bool(Eval('template_extra_parent')),
             Bool(Eval('template_extra_childs')))
-        cls.type.depends += ['template_extra_parent', 'template_extra_childs']
+        cls.type.depends |= {'template_extra_parent', 'template_extra_childs'}
 
         cls.product.domain.insert(0,
             If(Bool(Eval('template_extra_parent', 0)),
