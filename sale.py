@@ -49,9 +49,9 @@ class PartyExtraProduct(ModelSQL):
     __name__ = 'party-extra_product'
 
     party = fields.Many2One('party.party', 'Party', ondelete='CASCADE',
-        required=True, select=True)
+        required=True)
     product = fields.Many2One('product.product', 'Product', ondelete='RESTRICT',
-        required=True, select=True)
+        required=True)
 
 
 class Sale(metaclass=PoolMeta):
@@ -89,9 +89,9 @@ class SaleExtraProduct(ModelSQL):
     'Sale - Extra Services'
     __name__ = 'sale.sale-extra_product'
     sale = fields.Many2One('sale.sale', 'Sale', ondelete='CASCADE',
-        required=True, select=True)
+        required=True)
     product = fields.Many2One('product.product', 'Product', ondelete='RESTRICT',
-        required=True, select=True)
+        required=True)
 
 
 class SaleLine(metaclass=PoolMeta):
