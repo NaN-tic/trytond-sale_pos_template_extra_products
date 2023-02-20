@@ -2,7 +2,7 @@
 <!-- The COPYRIGHT file at the top level of this repository contains the full
      copyright notices and license terms. -->
 <data>
-    <xpath expr="/form/notebook/page[@id='sale']" position="after">
+    <xpath expr="/form/notebook/page[@id='payments']" position="after">
         <page name="extra_services">
             <field name="extra_services" colspan="4"/>
         </page>
