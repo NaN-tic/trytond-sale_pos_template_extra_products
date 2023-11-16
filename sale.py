@@ -66,7 +66,7 @@ class Sale(metaclass=PoolMeta):
             'readonly': Eval('state') == 'done',
             },
         context={
-            'company': Eval('company'),
+            'company': Eval('company', -1),
             },
         depends=['state', 'company'])
 
@@ -121,7 +121,7 @@ class SaleLine(metaclass=PoolMeta):
                 ()))
         cls.product.depends.add('template_extra_parent')
 
-        cls.template.context = {'company': Eval('company')}
+        cls.template.context = {'company': Eval('company', -1)}
         cls.template.depends.add('company')
 
     def update_template_line_quantity(self):
