@@ -19,8 +19,7 @@ class Template(metaclass=PoolMeta):
         states={
             'invisible': Eval('type') != 'service',
             'required': Eval('type') == 'service',
-            },
-        depends=['type'])
+            })
 
     @staticmethod
     def default_service_available_on():
@@ -68,7 +67,7 @@ class Sale(metaclass=PoolMeta):
         context={
             'company': Eval('company', -1),
             },
-        depends=['state', 'company'])
+        depends=['company'])
 
     @fields.depends('extra_services')
     def on_change_party(self):
@@ -193,8 +192,7 @@ class SetQuantitiesStart(metaclass=PoolMeta):
             ('salable', '=', True),
             ('type', '=', 'service'),
             ('service_available_on', '=', 'lines'),
-            ],
-        depends=['template_line_template'])
+            ])
 
 
 class SetQuantities(metaclass=PoolMeta):
