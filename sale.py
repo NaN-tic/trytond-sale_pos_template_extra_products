@@ -219,10 +219,12 @@ class SetQuantities(metaclass=PoolMeta):
         pool = Pool()
         SaleLine = pool.get('sale.line')
 
-        old_quantity = self.start.template_line.quantity
-
-        res = super(SetQuantities, self).transition_set_(*args, **kwargs)
         template_line = self.start.template_line
+        res = super().transition_set_(*args, **kwargs)
+        if not template_line:
+            return res
+
+        old_quantity = template_line.quantity
         if not self.start.extra_products:
             if template_line.template_extra_childs:
                 SaleLine.delete(template_line.template_extra_childs)
